@@ -9,7 +9,8 @@ const storiesRouter = require('./routes/stories')
 const chatRouter = require('./routes/chat')
 
 const app = express()
-const PORT = process.env.PORT || 3000
+// Railway 生成的对外端口常常是 8080；若平台没有注入 PORT，就用 8080 作为兜底
+const PORT = process.env.PORT || 8080
 
 const debugLog = (line) => {
   try {
