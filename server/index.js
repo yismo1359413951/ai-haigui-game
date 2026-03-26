@@ -59,6 +59,35 @@ app.get('/', (req, res) => {
   })
 })
 
+// Additional health endpoints (some platforms probe these paths instead of `/`)
+app.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    data: { message: 'ok' },
+  })
+})
+
+app.get('/healthz', (req, res) => {
+  res.json({
+    success: true,
+    data: { message: 'ok' },
+  })
+})
+
+app.get('/ready', (req, res) => {
+  res.json({
+    success: true,
+    data: { message: 'ok' },
+  })
+})
+
+app.get('/live', (req, res) => {
+  res.json({
+    success: true,
+    data: { message: 'ok' },
+  })
+})
+
 app.use('/api/stories', storiesRouter)
 app.use('/api', chatRouter)
 
