@@ -1,6 +1,6 @@
 import type { TApiResponse, TStoryPreview } from '../types'
 
-const BASE_URL = ''
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
 
 const parseJsonSafe = async <T>(response: Response): Promise<T> => {
   const text = await response.text()
