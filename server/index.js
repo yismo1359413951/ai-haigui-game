@@ -25,13 +25,29 @@ const debugLog = (line) => {
 }
 
 app.use(express.json())
+const configuredFrontendUrl = (process.env.FRONTEND_URL || '').trim()
+const isProd = process.env.NODE_ENV === 'production'
+
+// CORS:
+// - 生产环境应该配置 FRONTEND_URL（例如你的 Vercel 域名）
+// - 但即使没配，也绝不能把中文/非法字符串写进 Access-Control-Allow-Origin（会直接抛 ERR_INVALID_CHAR）
 app.use(
   cors({
-    origin:
-      process.env.FRONTEND_URL ||
-      (process.env.NODE_ENV === 'production'
-        ? '必须配置FRONTEND_URL环境变量'
-        : 'http://localhost:5177'),
+    origin: (origin, callback) => {
+      // 非浏览器请求（curl / server-to-server）可能没有 Origin
+      if (!origin) return callback(null, true)
+
+      if (configuredFrontendUrl) {
+        return callback(null, origin === configuredFrontendUrl)
+      }
+
+      if (isProd) {
+        console.warn(
+          '[CORS] FRONTEND_URL is not set in production; allowing all origins temporarily',
+        )
+      }
+      return callback(null, true)
+    },
   }),
 )
 
