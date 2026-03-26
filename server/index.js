@@ -50,6 +50,14 @@ app.get('/api/test', (req, res) => {
   })
 })
 
+// Health check endpoint（Railway/平台可能默认探测根路径 `/`）
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    data: { message: 'ok' },
+  })
+})
+
 app.use('/api/stories', storiesRouter)
 app.use('/api', chatRouter)
 
