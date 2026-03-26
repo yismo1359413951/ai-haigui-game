@@ -1,5 +1,17 @@
 {
   "rewrites": [
+    {
+      "source": "/api/test",
+      "destination": "https://ai-haigui-game-production-105c.up.railway.app/api/test"
+    },
+    {
+      "source": "/api/chat",
+      "destination": "https://ai-haigui-game-production-105c.up.railway.app/api/chat"
+    },
+    {
+      "source": "/api/judge",
+      "destination": "https://ai-haigui-game-production-105c.up.railway.app/api/judge"
+    },
     { "source": "/game/(.*)", "destination": "/index.html" },
     { "source": "/result", "destination": "/index.html" }
   ]
