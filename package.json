@@ -1,0 +1,13 @@
+{
+  "name": "ai-haigui-game-root",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "postinstall": "npm --prefix server install",
+    "start": "node server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
+
