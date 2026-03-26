@@ -53,6 +53,7 @@ app.get('/api/test', (req, res) => {
 app.use('/api/stories', storiesRouter)
 app.use('/api', chatRouter)
 
-app.listen(PORT, () => {
+// Bind to all network interfaces so Railway's public routing can reach the service.
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`)
 })
