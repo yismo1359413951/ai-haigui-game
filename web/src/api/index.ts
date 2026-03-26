@@ -1,6 +1,8 @@
 import type { TApiResponse, TStoryPreview } from '../types'
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
+// 生产环境请求走同域 `/api/*`，避免移动端直连后端被网络策略拦截。
+// 开发环境由 `vite.config.ts` 的 proxy 处理 `/api/*` 到本地后端。
+const BASE_URL = ''
 
 const parseJsonSafe = async <T>(response: Response): Promise<T> => {
   const text = await response.text()
