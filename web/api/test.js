@@ -1,18 +1,17 @@
-const defaultHandler = (res) => {
-  res.status(200).json({
-    success: true,
-    data: { message: 'ok' },
-  })
+const sendJson = (res, statusCode, payload) => {
+  res.statusCode = statusCode
+  res.setHeader('Content-Type', 'application/json; charset=utf-8')
+  res.end(JSON.stringify(payload))
 }
 
 module.exports = async (req, res) => {
-  // 兼容 OPTIONS 预检
   if (req.method === 'OPTIONS') {
-    res.status(200).end()
+    res.statusCode = 200
+    res.end()
     return
   }
 
   // 这个 endpoint 用于验证 Vercel API 代理链路是否通畅
-  defaultHandler(res)
+  sendJson(res, 200, { success: true, data: { message: 'ok' } })
 }
 

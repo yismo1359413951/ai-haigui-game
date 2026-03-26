@@ -1,14 +1,19 @@
+const sendJson = (res, statusCode, payload) => {
+  res.statusCode = statusCode
+  res.setHeader('Content-Type', 'application/json; charset=utf-8')
+  res.end(JSON.stringify(payload))
+}
+
 const parseJsonBody = async (req) => {
-  const chunks = []
-  for await (const chunk of req) chunks.push(chunk)
-  const raw = Buffer.concat(chunks).toString('utf8')
+  let raw = ''
+  for await (const chunk of req) raw += chunk.toString('utf8')
   if (!raw) return {}
   return JSON.parse(raw)
 }
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST' && req.method !== 'OPTIONS') {
-    res.status(405).json({
+    sendJson(res, 405, {
       success: false,
       error: { code: 'INVALID_INPUT', message: 'Method not allowed' },
     })
@@ -16,7 +21,8 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'OPTIONS') {
-    res.status(200).end()
+    res.statusCode = 200
+    res.end()
     return
   }
 
@@ -26,7 +32,7 @@ module.exports = async (req, res) => {
     const upstreamUrl = `${backendBase}/api/judge`
 
     if (!backendBase) {
-      res.status(500).json({
+      sendJson(res, 500, {
         success: false,
         error: {
           code: 'INVALID_INPUT',
@@ -45,12 +51,13 @@ module.exports = async (req, res) => {
     const text = await upstreamRes.text()
     try {
       const data = JSON.parse(text)
-      res.status(upstreamRes.status).json(data)
+      sendJson(res, upstreamRes.status, data)
     } catch {
-      res.status(502).send(text)
+      res.statusCode = 502
+      res.end(text)
     }
   } catch (err) {
-    res.status(500).json({
+    sendJson(res, 500, {
       success: false,
       error: {
         code: 'AI_ERROR',
